@@ -1,4 +1,6 @@
-<div class="flex-wrapper">
+<div class="flex-wrapper"
+  [style.right.px]="leftPosition"
+  [class.sliding-animation]="isSliding">
   <ng-content select="panel">
   </ng-content>
 </div>

@@ -10,28 +10,30 @@
 }
 
 .spacing {
-  margin-right: 10px;
+  padding-left: 10px;
   padding-right: 10px;
 }
 
 .mixin() {
   .flex-child {
     .black-border();
-    .spacing();
   }
 }
 
 .flex-wrapper {
   display: flex;
   flex-direction: row;
-  transition: left .5s;
   position: relative;
-  left: 0;
+  right: 0;
   height: 100%;
-
+  .spacing();
   ::ng-deep:not(:last-child) {
     .mixin();
   }
+}
+
+.sliding-animation {
+  transition: right .2s;
 }
 
 

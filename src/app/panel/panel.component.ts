@@ -22,7 +22,6 @@ export class PanelComponent implements AfterViewChecked {
   constructor() { }
 
   ngAfterViewChecked() {
-    console.log('emitting', this.panelWrapperRef.nativeElement.offsetWidth);
     this.width = this.panelWrapperRef.nativeElement.offsetWidth;
     this.widthChanged.emit(this.width);
   }

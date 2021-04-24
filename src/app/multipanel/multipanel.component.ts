@@ -1,10 +1,13 @@
-import { Component, OnInit, QueryList, ContentChildren, OnChanges, OnDestroy, AfterViewInit, AfterViewChecked, Input } from '@angular/core';
+import { Component, OnInit, QueryList, ContentChildren, OnChanges, OnDestroy, AfterViewInit, AfterViewChecked, Input, ChangeDetectorRef } from '@angular/core';
 import { Subscription, of, combineLatest } from 'rxjs';
 import { withLatestFrom } from 'rxjs/operators';
 import _ from 'lodash';
 
 import { PanelComponent } from '../panel/panel.component';
 
+/**
+ *
+ */
 class Panel {
   /**
    *
@@ -21,13 +24,16 @@ class Panel {
   /**
    *
    */
-  index?: number;
+  index: number;
 
   constructor(panel: { [P in keyof Panel]: Panel[P] }) {
     Object.assign(this, panel);
   }
 }
 
+/**
+ *
+ */
 class PanelCollection {
 
   [key: number]: Panel;
@@ -39,8 +45,8 @@ class PanelCollection {
     delete this[key];
   }
 
-  add(key: number, value: {[P in keyof Panel]: Panel[P]}) {
-    this[key] = new Panel({...value, index: key});
+  add(value: {[P in keyof Panel]: Panel[P]}) {
+    this[value.index] = new Panel(value);
   }
 
   getLeftmostVisiblePanel(): Panel {
@@ -58,7 +64,7 @@ class PanelCollection {
   templateUrl: './multipanel.component.html',
   styleUrls: ['./multipanel.component.less']
 })
-export class MultipanelComponent implements OnChanges, OnDestroy, AfterViewChecked, AfterViewInit {
+export class MultipanelComponent implements OnChanges, OnDestroy, AfterViewChecked {
   /**
    * Query list of panel components input into the Multipanel.
    */
@@ -74,28 +80,27 @@ export class MultipanelComponent implements OnChanges, OnDestroy, AfterViewCheck
   /**
    *
    */
+  isSliding = true;
+  /**
+   *
+   */
   private queryListLength = 0;
   /**
    *
    */
   private panels = new PanelCollection();
 
-  constructor() {
+  constructor(private changeDetector: ChangeDetectorRef) {
   }
 
   ngOnChanges() {
-  }
-
-  ngAfterViewInit() {
-    console.log(_.cloneDeep(this.multipanelPanels), 'after view init');
+    this.isSliding = true;
   }
 
   ngAfterViewChecked() {
-    console.log(_.cloneDeep(this.multipanelPanels), 'after view checked', this.queryListLength)
     if (this.queryListLength !== this.multipanelPanels.length) {
       this.onQueryListChange(this.multipanelPanels);
     }
-    console.log(_.cloneDeep(this.panels));
   }
 
   ngOnDestroy() {
@@ -120,19 +125,7 @@ export class MultipanelComponent implements OnChanges, OnDestroy, AfterViewCheck
    */
   private extractPanelInfo(list: QueryList<PanelComponent>) {
     if (list.length > this.queryListLength) {
-      this.panels.add(list.length, {
-        subscription: combineLatest<number>(list.last.widthChanged, of(list.length)).subscribe(
-          ([width, index]) => {
-            console.log('width emission', width, index)
-            if (!this.panels[index].visible && width !== this.panels[index].width) {
-              this.leftPosition += (width - this.panels[index].width);
-            }
-            this.panels[index].width = width;
-          }
-        ),
-        visible: true,
-        width: list.last.width,
-      });
+      this.panels.add(this.getPanelData(list));
 
       if (list.length > this.displayCount) {
         this.slideToThe('left');
@@ -140,18 +133,37 @@ export class MultipanelComponent implements OnChanges, OnDestroy, AfterViewCheck
     } else {
       this.panels.delete(this.queryListLength);
 
-      if (list.length < this.displayCount + 1) {
+      if (list.length >= this.displayCount) {
         this.slideToThe('right');
       }
     }
   }
 
   /**
+   *
+   */
+  private getPanelData(list: QueryList<PanelComponent>) {
+    return {
+      index: list.length,
+      subscription: combineLatest<number>(list.last.widthChanged, of(list.length)).subscribe(
+        ([width, index]) => {
+          this.isSliding = false;
+          if (!this.panels[index].visible && width !== this.panels[index].width) {
+            this.leftPosition += (width - this.panels[index].width);
+          }
+          this.panels[index].width = width;
+        }
+      ),
+      visible: true,
+      width: list.last.width,
+    };
+  }
+
+  /**
    * Everybody clap your hands.
    */
-  slideToThe(direction: string) {
-    console.log(direction);
-
+  private slideToThe(direction: string) {
+    this.isSliding = true;
     if (direction === 'left') {
       const leftPanel = this.panels.getLeftmostVisiblePanel();
       this.leftPosition += leftPanel.width;
@@ -164,6 +176,6 @@ export class MultipanelComponent implements OnChanges, OnDestroy, AfterViewCheck
       this.panels[rightPanel.index].visible = true;
     }
 
-    console.log(this.leftPosition);
+    this.changeDetector.detectChanges();
   }
 }
