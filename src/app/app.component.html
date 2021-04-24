@@ -1,21 +1,58 @@
-<!--The content below is only a placeholder and can be replaced.-->
-<div style="text-align:center">
-  <h1>
-    Welcome to {{ title }}!
-  </h1>
-  <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
+<div style="height: 200px">
+  <multipanel [displayCount]="2">
+    <panel *ngFor="let panel of multipanelPanels; let i = index; trackBy: trackbyIdx">
+      <panel-content [name]="panel.name"
+        [index]="i"
+        (emitter)="$event.action === 'add' ? addPanel() : removePanel($event.name)">
+      </panel-content>
+    </panel>
+  </multipanel>
 </div>
-<h2>Here are some links to help you start: </h2>
-<ul>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-  </li>
-  <li>
-    <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-  </li>
-</ul>
 
-<router-outlet></router-outlet>
+<br/>
+
+<div style="height: 500px">
+  <table>
+    <thead>
+      <tr>
+        <th>
+          Panel content
+        </th>
+        <th>
+          Panel index
+        </th>
+      </tr>
+    </thead>
+
+    <tbody>
+      <tr *ngFor="let pan of multipanelPanels; let idx = index; trackBy: trackbyIdx">
+        <td>
+          {{pan.name}}
+        </td>
+        <td>
+          {{idx}}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<br/>
+<button (click)="addPanel(pendingPanels[0]?.name)">
+  Add new panel
+</button>
+
+<button (click)="removePanel(multipanelPanels[multipanelPanels.length - 1]?.name)">
+  Pop
+</button>
+
+<button (click)="breakTheNames()">
+  <span *ngIf="!i">
+    start
+  </span>
+  <span *ngIf="i">
+    stop
+  </span>
+  change detection
+</button>
+<!-- <router-outlet></router-outlet> -->

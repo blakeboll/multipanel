@@ -1,0 +1,41 @@
+:host {
+  display: block;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
+}
+
+.black-border {
+  border-right: 1px solid black;
+}
+
+.spacing {
+  margin-right: 10px;
+  padding-right: 10px;
+}
+
+.mixin() {
+  .flex-child {
+    .black-border();
+    .spacing();
+  }
+}
+
+.flex-wrapper {
+  display: flex;
+  flex-direction: row;
+  transition: left .5s;
+  position: relative;
+  left: 0;
+  height: 100%;
+
+  ::ng-deep:not(:last-child) {
+    .mixin();
+  }
+}
+
+
+// :host ::ng-deep .slide-panel>* {
+//   width: 1%;
+//   display: block;
+// }
