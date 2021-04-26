@@ -1,6 +1,7 @@
 <div class="flex-wrapper"
-  [style.right.px]="leftPosition"
+  [style.right.px]="rightPosition"
   [class.sliding-animation]="isSliding">
+  <!-- The panel select on the ng-content specifies that only panel components will be rendered here -->
   <ng-content select="panel">
   </ng-content>
 </div>

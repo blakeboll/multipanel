@@ -1,3 +1,4 @@
+// These styles are a bit messy.
 :host {
   display: block;
   overflow: hidden;
@@ -27,12 +28,13 @@
   right: 0;
   height: 100%;
   .spacing();
-  ::ng-deep {
+  ::ng-deep { // Put padding on all flex children.
     .flex-child {
       .spacing();
     }
   }
 
+  // Don't put borders on the last panel or the immediate panel out of view.
   ::ng-deep:not(:last-child) {
     &:not(:nth-last-child(3)) {
       .mixin();
@@ -40,6 +42,7 @@
   }
 }
 
+// Slide with a transition.
 .sliding-animation {
   transition: right .2s;
 }
