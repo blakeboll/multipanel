@@ -5,8 +5,8 @@
   height: 100%;
 }
 
-.black-border {
-  border-right: 1px solid black;
+.white-border {
+  border-right: 1px solid white;
 }
 
 .spacing {
@@ -16,7 +16,7 @@
 
 .mixin() {
   .flex-child {
-    .black-border();
+    .white-border();
   }
 }
 
@@ -27,17 +27,19 @@
   right: 0;
   height: 100%;
   .spacing();
+  ::ng-deep {
+    .flex-child {
+      .spacing();
+    }
+  }
+
   ::ng-deep:not(:last-child) {
-    .mixin();
+    &:not(:nth-last-child(3)) {
+      .mixin();
+    }
   }
 }
 
 .sliding-animation {
   transition: right .2s;
 }
-
-
-// :host ::ng-deep .slide-panel>* {
-//   width: 1%;
-//   display: block;
-// }
