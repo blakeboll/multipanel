@@ -31,6 +31,10 @@ export class AppComponent {
    * Interval
    */
   i: any;
+  /**
+   * Number of panels displayed in the multipanel.
+   */
+  numberOfPanels = 2;
 
   constructor() { }
 

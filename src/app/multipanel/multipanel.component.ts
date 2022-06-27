@@ -1,4 +1,16 @@
-import { Component, OnInit, QueryList, ContentChildren, OnChanges, OnDestroy, AfterViewInit, AfterViewChecked, Input, ChangeDetectorRef } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  QueryList,
+  ContentChildren,
+  OnChanges,
+  OnDestroy,
+  AfterViewInit,
+  AfterViewChecked,
+  Input,
+  ChangeDetectorRef,
+  SimpleChanges
+} from '@angular/core';
 import { Subscription, of, combineLatest } from 'rxjs';
 import { withLatestFrom } from 'rxjs/operators';
 import _ from 'lodash';
@@ -98,7 +110,7 @@ export class MultipanelComponent implements OnChanges, OnDestroy, AfterViewCheck
   constructor(private changeDetector: ChangeDetectorRef) {
   }
 
-  ngOnChanges() {
+  ngOnChanges(changes: SimpleChanges) {
     this.isSliding = true;
   }
 

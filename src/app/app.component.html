@@ -1,5 +1,5 @@
 <div style="height: 200px">
-  <multipanel [displayCount]="2">
+  <multipanel [displayCount]="numberOfPanels">
     <panel *ngFor="let panel of multipanelPanels; let i = index; trackBy: trackbyIdx">
       <panel-content [name]="panel.name"
         [index]="i"
@@ -36,8 +36,14 @@
     </tbody>
   </table>
 </div>
+<br>
+
+<label for="identifier"> Number of visible slides allowed </label>
+<input id="identifier" type="number" [(ngModel)]="numberOfPanels"/>
 
 <br/>
+<br/>
+
 <button (click)="addPanel(pendingPanels[0]?.name)">
   Add new panel
 </button>
