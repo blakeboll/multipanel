@@ -1,12 +1,10 @@
-
 ---
 name: Bug report
 about: Create a report to help us improve
 
 ---
 
-**Note on labels**
-Use the Github label 'bug-recent' if the bug was discovered on recently released code. Otherwise, use the label 'bug'.
+Note on labels: Use the Github label 'bug-recent' if the bug was discovered on recently released code. Otherwise, use the label 'bug'.
 
 **How to reproduce the error**
 Detailed steps to reproduce the error:
