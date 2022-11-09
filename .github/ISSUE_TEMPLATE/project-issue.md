@@ -1,6 +1,9 @@
 ---
 name: Project issue
 about: Create an issue describing an incremental step towards project completion
+title: ''
+labels: ''
+assignees: ''
 
 ---
 
